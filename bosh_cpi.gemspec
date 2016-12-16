@@ -1,7 +1,5 @@
 # coding: utf-8
-require File.expand_path('../lib/cloud/version', __FILE__)
-
-version = Bosh::Clouds::VERSION
+version = IO.read(File.expand_path('../version', __FILE__))
 
 Gem::Specification.new do |spec|
   spec.name        = 'bosh_cpi'
