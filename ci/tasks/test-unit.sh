@@ -32,4 +32,4 @@ print_git_state
 
 export PATH=/usr/local/ruby/bin:$PATH
 bundle install --local
-bundle exec rspec --trace spec
+bundle exec rspec spec
