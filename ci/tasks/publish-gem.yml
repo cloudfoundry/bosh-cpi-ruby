@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: bosh/main
+
+inputs:
+  - name: bosh-src
+  - name: version-semver
+
+run:
+  path: bosh-src/ci/tasks/publis-gem.sh
+
+params:
+  RUBY_VERSION: 2.3.1

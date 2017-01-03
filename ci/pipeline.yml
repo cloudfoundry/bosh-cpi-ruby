@@ -3,6 +3,7 @@ groups:
   - name: cpi-ruby
     jobs:
       - unit-tests
+      - publish-gem
 
 jobs:
   - name: unit-tests
@@ -21,15 +22,40 @@ jobs:
             icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
             text: {{slack_failure_message}}
 
+  - name: publish-gem
+    public: true
+    serial: true
+    build_logs_to_retain: 250
+    plan:
+      - { get: bosh-src, passed: [unit-tests], trigger: false }
+      - { get: version-semver, trigger: false }
+
+      - task: test
+        file: bosh-src/ci/tasks/publish-gem.yml
+        on_success:
+          put: slack-alert
+          params:
+            channel: {{slack_channel_name}}
+            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+            text: {{slack_success_message}}
+
 resources:
   - name: bosh-src
     type: git
     source:
       uri: {{bosh_cpi_url}}
       branch: master
-      private_key: {{github_deployment_key}}
 
   - name: slack-alert
     type: slack-notification
     source:
       url: {{slack_hook_url}}
+
+  - name: version-semver
+    type: semver
+    source:
+      initial_version: 2.0.3
+      key: current-version
+      access_key_id: {{bosh_cpi_ruby__access_key}}
+      secret_access_key: {{bosh_cpi_ruby__secret_key}}
+      bucket: {{bosh_cpi_ruby__bucket}}
