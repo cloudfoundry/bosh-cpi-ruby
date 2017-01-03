@@ -27,9 +27,10 @@ check_param RUBY_VERSION
 source /etc/profile.d/chruby.sh
 chruby $RUBY_VERSION
 
-cd bosh-src
-print_git_state
+pushd bosh-src
+    print_git_state
 
-export PATH=/usr/local/ruby/bin:$PATH
-bundle install --local
-bundle exec rspec spec
+    export PATH=/usr/local/ruby/bin:$PATH
+    bundle install --local
+    bundle exec rspec spec
+popd
