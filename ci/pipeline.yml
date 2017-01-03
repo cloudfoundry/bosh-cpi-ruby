@@ -4,6 +4,9 @@ groups:
     jobs:
       - unit-tests
       - publish-gem
+      - bump-major
+      - bump-minor
+      - bump-patch
 
 jobs:
   - name: unit-tests
@@ -39,6 +42,30 @@ jobs:
             icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
             text: {{slack_success_message}}
 
+  - name: bump-minor
+    public: true
+    plan:
+      - get: version-semver
+        params: { bump: minor }
+      - put: version-semver
+        params: { file: version-semver/number }
+
+  - name: bump-major
+    public: true
+    plan:
+      - get: version-semver
+        params: { bump: major }
+      - put: version-semver
+        params: { file: version-semver/number }
+
+  - name: bump-patch
+    public: true
+    plan:
+      - get: version-semver
+        params: { bump: patch }
+      - put: version-semver
+        params: { file: version-semver/number }
+
 resources:
   - name: bosh-src
     type: git
@@ -54,7 +81,6 @@ resources:
   - name: version-semver
     type: semver
     source:
-      initial_version: 2.0.3
       key: current-version
       access_key_id: {{bosh_cpi_ruby__access_key}}
       secret_access_key: {{bosh_cpi_ruby__secret_key}}
