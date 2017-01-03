@@ -436,21 +436,21 @@ describe Bosh::Cpi::Cli do
     context 'when request json does not include arguments' do
       it 'returns invalid_call error' do
         subject.run('{"method":"create_vm"}')
-        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Arguments must be an Array, got: \'nil\'","ok_to_retry":false},"log":')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Arguments must be an Array","ok_to_retry":false},"log":')
       end
     end
 
     context 'when request json arguments is not an array' do
       it 'returns invalid_call error' do
         subject.run('{"method":"create_vm","arguments":"string"}')
-        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Arguments must be an Array, got: \'\"string\"\'","ok_to_retry":false},"log":')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Arguments must be an Array","ok_to_retry":false},"log":')
       end
     end
 
     context 'when request json context does not include director uuid' do
       it 'returns invalid_call error' do
         subject.run('{"method":"create_vm","arguments":[]}')
-        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Request should include context with director uuid, got: \'nil\'","ok_to_retry":false},"log":')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Request should include context with director uuid","ok_to_retry":false},"log":')
       end
     end
 

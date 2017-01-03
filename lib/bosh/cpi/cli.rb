@@ -55,12 +55,12 @@ class Bosh::Cpi::Cli
 
     arguments = request['arguments']
     unless arguments.is_a?(Array)
-      return error_response(INVALID_CALL_ERROR_TYPE, "Arguments must be an Array, got: '#{arguments.inspect}'", false)
+      return error_response(INVALID_CALL_ERROR_TYPE, "Arguments must be an Array", false)
     end
 
     context = request['context']
     unless context.is_a?(Hash) && context['director_uuid'].is_a?(String)
-      return error_response(INVALID_CALL_ERROR_TYPE, "Request should include context with director uuid, got: '#{context.inspect}'", false)
+      return error_response(INVALID_CALL_ERROR_TYPE, "Request should include context with director uuid", false)
     end
 
     req_id = context['request_id']
