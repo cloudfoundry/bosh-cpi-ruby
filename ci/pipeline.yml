@@ -8,18 +8,22 @@ groups:
       - publish-patch
 
 shared:
-  - &success-alert
-    put: slack-alert
-    params:
-      channel: {{slack_channel_name}}
-      icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-      text: {{slack_success_message}}
   - &failure-alert
     put: slack-alert
     params:
+      silent: true
       channel: {{slack_channel_name}}
-      icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-      text: {{slack_failure_message}}
+      icon_emoji: ":interrobang:"
+      text: |
+        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_JOB_NAME> job failed!*
+  - &success-alert
+    put: slack-alert
+    params:
+      silent: true
+      channel: {{slack_channel_name}}
+      icon_emoji: ":rocket:"
+      text: |
+        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_JOB_NAME> job passed!*
 
 jobs:
   - name: unit-tests
