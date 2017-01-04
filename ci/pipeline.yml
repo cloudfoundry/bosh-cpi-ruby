@@ -15,7 +15,7 @@ shared:
       channel: {{slack_channel_name}}
       icon_emoji: ":interrobang:"
       text: |
-        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_JOB_NAME> job failed!*
+        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_PIPELINE_NAME / $BUILD_JOB_NAME> job failed!*
   - &success-alert
     put: slack-alert
     params:
@@ -23,7 +23,7 @@ shared:
       channel: {{slack_channel_name}}
       icon_emoji: ":rocket:"
       text: |
-        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_JOB_NAME> job passed!*
+        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_PIPELINE_NAME / $BUILD_JOB_NAME> job passed!*
 
 jobs:
   - name: unit-tests
