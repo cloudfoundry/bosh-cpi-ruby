@@ -11,7 +11,7 @@ inputs:
   - name: version-semver
 
 run:
-  path: bosh-src/ci/tasks/publis-gem.sh
+  path: bosh-src/ci/tasks/publish-gem.sh
 
 params:
   RUBYGEMS_API_KEY: ""
