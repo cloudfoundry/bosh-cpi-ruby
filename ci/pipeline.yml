@@ -3,10 +3,23 @@ groups:
   - name: cpi-ruby
     jobs:
       - unit-tests
-      - publish-gem
-      - bump-major
-      - bump-minor
-      - bump-patch
+      - publish-major
+      - publish-minor
+      - publish-patch
+
+shared:
+  - &success-alert
+    put: slack-alert
+    params:
+      channel: {{slack_channel_name}}
+      icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+      text: {{slack_success_message}}
+  - &failure-alert
+    put: slack-alert
+    params:
+      channel: {{slack_channel_name}}
+      icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
+      text: {{slack_failure_message}}
 
 jobs:
   - name: unit-tests
@@ -15,56 +28,48 @@ jobs:
     build_logs_to_retain: 250
     plan:
       - { get: bosh-src, trigger: true }
-
       - task: test
         file: bosh-src/ci/tasks/test-unit.yml
-        on_failure:
-          put: slack-alert
-          params:
-            channel: {{slack_channel_name}}
-            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-            text: {{slack_failure_message}}
+        on_failure: *failure-alert
 
-  - name: publish-gem
-    public: true
-    serial: true
-    build_logs_to_retain: 250
-    plan:
-      - { get: bosh-src, passed: [unit-tests], trigger: false }
-      - { get: version-semver, trigger: false }
-
-      - task: test
-        file: bosh-src/ci/tasks/publish-gem.yml
-        on_success:
-          put: slack-alert
-          params:
-            channel: {{slack_channel_name}}
-            icon_url: http://cl.ly/image/3e1h0H3H2s0P/concourse-logo.png
-            text: {{slack_success_message}}
-
-  - name: bump-minor
+  - name: publish-minor
     public: true
     plan:
+      - get: bosh-src
+        passed: [unit-tests]
+        trigger: false
       - get: version-semver
         params: { bump: minor }
-      - put: version-semver
-        params: { file: version-semver/number }
+      - &publish
+        do:
+        - task: publish
+          file: bosh-src/ci/tasks/publish-gem.yml
+          params:
+            RUBYGEMS_API_KEY: {{rubygems_api_key}}
+        - put: version-semver
+          params: { file: version-semver/number }
+        on_success: *success-alert
+        on_failure: *failure-alert
 
-  - name: bump-major
+  - name: publish-major
     public: true
     plan:
+      - get: bosh-src
+        passed: [unit-tests]
+        trigger: false
       - get: version-semver
         params: { bump: major }
-      - put: version-semver
-        params: { file: version-semver/number }
+      - *publish
 
-  - name: bump-patch
+  - name: publish-patch
     public: true
     plan:
+      - get: bosh-src
+        passed: [unit-tests]
+        trigger: false
       - get: version-semver
         params: { bump: patch }
-      - put: version-semver
-        params: { file: version-semver/number }
+      - *publish
 
 resources:
   - name: bosh-src

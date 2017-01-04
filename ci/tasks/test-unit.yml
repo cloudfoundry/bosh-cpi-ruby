@@ -13,4 +13,4 @@ run:
   path: bosh-src/ci/tasks/test-unit.sh
 
 params:
-  RUBY_VERSION: 2.3.1
+  RUBY_VERSION: ""

@@ -2,15 +2,6 @@
 
 set -e
 
-check_param() {
-  local name=$1
-  local value=$(eval echo '$'$name)
-  if [ "$value" == 'replace-me' ]; then
-    echo "environment variable $name must be set"
-    exit 1
-  fi
-}
-
 print_git_state() {
   if [ -d ".git" ] ; then
     echo "--> last commit..."
@@ -22,15 +13,15 @@ print_git_state() {
   fi
 }
 
-check_param RUBY_VERSION
+: ${RUBY_VERSION:="2.3.1"}
 
 source /etc/profile.d/chruby.sh
 chruby $RUBY_VERSION
 
 pushd bosh-src
-    print_git_state
+  print_git_state
 
-    export PATH=/usr/local/ruby/bin:$PATH
-    bundle install --local
-    bundle exec rspec spec
+  export PATH=/usr/local/ruby/bin:$PATH
+  bundle install --local
+  bundle exec rspec spec
 popd
