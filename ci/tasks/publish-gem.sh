@@ -14,6 +14,7 @@ cat << EOF > ~/.gem/credentials
 ---
 :rubygems_api_key: ${RUBYGEMS_API_KEY}
 EOF
+chmod 0600 ~/.gem/credentials
 
 pushd bosh-src
   git clean -xfd

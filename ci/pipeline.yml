@@ -34,6 +34,7 @@ jobs:
 
   - name: publish-minor
     public: true
+    serial: true
     plan:
       - get: bosh-src
         passed: [unit-tests]
@@ -53,6 +54,7 @@ jobs:
 
   - name: publish-major
     public: true
+    serial: true
     plan:
       - get: bosh-src
         passed: [unit-tests]
@@ -63,6 +65,7 @@ jobs:
 
   - name: publish-patch
     public: true
+    serial: true
     plan:
       - get: bosh-src
         passed: [unit-tests]
