@@ -22,6 +22,8 @@ describe Bosh::Cpi::Cli do
           formatted_result = "\"#{Regexp.quote(result)}\""
         when nil
           formatted_result = 'null'
+        when Hash
+          formatted_result =  "#{Regexp.quote(JSON.dump(result))}"
         else
           formatted_result = "#{Regexp.quote(result.to_s)}"
       end
@@ -210,6 +212,22 @@ describe Bosh::Cpi::Cli do
         JSON
 
         expect(result_io.string).to match(make_result_regexp(nil))
+      end
+    end
+
+    describe 'info' do
+      it 'takes json and calls specified method on the cpi' do
+        expect(cpi).to(receive(:info){ logs_io.write('fake-log') }.and_return({"stemcell_formats" => ["format"]}))
+
+        subject.run <<-JSON
+          {
+            "method": "info",
+            "arguments": [],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+
+        expect(result_io.string).to match(make_result_regexp({"stemcell_formats" => ["format"]}))
       end
     end
 

@@ -2,6 +2,7 @@ require 'json'
 
 class Bosh::Cpi::Cli
   KNOWN_RPC_METHODS = %w(
+    info
     current_vm_id
     create_stemcell
     delete_stemcell
