@@ -26,6 +26,17 @@ module Bosh
     def initialize(options)
     end
 
+    ## Information about cpi
+    #
+    # Sample info response:
+    #  {"stemcell_formats" =>
+    #    ["aws-raw", "aws-light"]
+    #  }
+    #  @return [Hash] information about cpi, currently stemcell formats, which are supported
+    def info
+      not_implemented(:info)
+    end
+
     ##
     # Get the vm_id of this host
     #
