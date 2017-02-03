@@ -7,24 +7,6 @@ groups:
       - publish-minor
       - publish-patch
 
-shared:
-  - &failure-alert
-    put: slack-alert
-    params:
-      silent: true
-      channel: {{slack_channel_name}}
-      icon_emoji: ":interrobang:"
-      text: |
-        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_PIPELINE_NAME / $BUILD_JOB_NAME> job failed!*
-  - &success-alert
-    put: slack-alert
-    params:
-      silent: true
-      channel: {{slack_channel_name}}
-      icon_emoji: ":rocket:"
-      text: |
-        *The <$ATC_EXTERNAL_URL/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|$BUILD_PIPELINE_NAME / $BUILD_JOB_NAME> job passed!*
-
 jobs:
   - name: unit-tests
     public: true
@@ -34,7 +16,6 @@ jobs:
       - { get: bosh-src, trigger: true }
       - task: test
         file: bosh-src/ci/tasks/test-unit.yml
-        on_failure: *failure-alert
 
   - name: publish-minor
     public: true
@@ -53,8 +34,6 @@ jobs:
             RUBYGEMS_API_KEY: {{rubygems_api_key}}
         - put: version-semver
           params: { file: version-semver/number }
-        on_success: *success-alert
-        on_failure: *failure-alert
 
   - name: publish-major
     public: true
@@ -84,11 +63,6 @@ resources:
     source:
       uri: {{bosh_cpi_url}}
       branch: master
-
-  - name: slack-alert
-    type: slack-notification
-    source:
-      url: {{slack_hook_url}}
 
   - name: version-semver
     type: semver
