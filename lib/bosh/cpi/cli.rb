@@ -88,10 +88,15 @@ class Bosh::Cpi::Cli
       return error_response(UNKNOWN_ERROR_TYPE, e.message, false, e.backtrace)
     ensure
       end_time = Time.now.utc
-      @logger.info("Finished #{method} in #{(end_time - start_time).round(2)} seconds")
+      duration = (end_time - start_time).round(2)
+      @logger.info("Finished #{method} in #{duration} seconds")
+      stats = {
+          method: method,
+          time: { start: start_time, duration: duration }
+      }
     end
 
-    result_response(result)
+    result_response(result, stats)
   end
 
   private
@@ -117,11 +122,12 @@ class Bosh::Cpi::Cli
     @result_io.print(JSON.dump(hash)); nil
   end
 
-  def result_response(result)
+  def result_response(result, stats)
     hash = {
       result: result,
       error: nil,
-      log: encode_string_as_utf8(@logs_string_io.string)
+      log: encode_string_as_utf8(@logs_string_io.string),
+      stats: stats
     }
     @result_io.print(JSON.dump(hash)); nil
   end
