@@ -11,6 +11,7 @@ class Bosh::Cpi::Cli
     has_vm
     reboot_vm
     set_vm_metadata
+    set_disk_metadata
     create_disk
     has_disk
     delete_disk

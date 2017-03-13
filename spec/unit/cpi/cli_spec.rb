@@ -252,6 +252,26 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    describe 'set_disk_metadata' do
+      it 'takes json and calls specified method on the cpi' do
+        allow(cpi).to receive(:set_disk_metadata) { logs_io.write('fake-log') }.and_return(nil)
+
+        subject.run <<-JSON
+          {
+            "method": "set_disk_metadata",
+            "arguments": [
+              "fake-disk-id",
+              {"key": "value"}
+            ],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+
+        expect(cpi).to have_received(:set_disk_metadata).with('fake-disk-id', {'key' => 'value'})
+        expect(result_io.string).to match(make_result_regexp(nil))
+      end
+    end
+
     describe 'create_disk' do
       it 'takes json and calls specified method on the cpi' do
         expect(cpi).to(receive(:create_disk).

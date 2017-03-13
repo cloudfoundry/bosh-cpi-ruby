@@ -155,6 +155,18 @@ module Bosh
     end
 
     ##
+    # Set metadata for a disk
+    #
+    # Optional. Implement to provide more information for the IaaS.
+    #
+    # @param [String] disk_id disk id that was once returned by {#create_disk}
+    # @param [Hash] metadata metadata key/value pairs
+    # @return [void]
+    def set_disk_metadata(disk_id, metadata)
+      not_implemented(:set_disk_metadata)
+    end
+
+    ##
     # Creates a disk (possibly lazily) that will be attached later to a VM. When
     # VM locality is specified the disk will be placed near the VM so it won't have to move
     # when it's attached later.
