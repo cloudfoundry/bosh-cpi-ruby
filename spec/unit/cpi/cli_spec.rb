@@ -467,7 +467,7 @@ describe Bosh::Cpi::Cli do
     context 'when request json includes unknown method' do
       it 'returns invalid_call error' do
         subject.run('{"method":"unknown-method"}')
-        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"Method is not known, got: \'unknown-method\'","ok_to_retry":false},"log":')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"Bosh::Clouds::NotImplemented","message":"Method is not known, got: \'unknown-method\'","ok_to_retry":false},"log":')
       end
     end
 

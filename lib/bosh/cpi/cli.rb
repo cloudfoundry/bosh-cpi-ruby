@@ -52,7 +52,7 @@ class Bosh::Cpi::Cli
     end
 
     unless KNOWN_RPC_METHODS.include?(method)
-      return error_response(INVALID_CALL_ERROR_TYPE, "Method is not known, got: '#{method}'", false)
+      return error_response(Bosh::Clouds::NotImplemented.name, "Method is not known, got: '#{method}'", false)
     end
 
     arguments = request['arguments']
