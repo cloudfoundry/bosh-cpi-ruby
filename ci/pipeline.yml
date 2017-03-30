@@ -13,23 +13,28 @@ jobs:
     serial: true
     build_logs_to_retain: 250
     plan:
-      - { get: bosh-src, trigger: true }
+      - { get: bosh-cpi-ruby-gem, trigger: true }
       - task: test
-        file: bosh-src/ci/tasks/test-unit.yml
+        file: bosh-cpi-ruby-gem/ci/tasks/test-unit.yml
 
   - name: publish-minor
     public: true
     serial: true
     plan:
-      - get: bosh-src
+      - get: bosh-cpi-ruby-gem
         passed: [unit-tests]
         trigger: false
       - get: version-semver
         params: { bump: minor }
       - &publish
         do:
+        - put: bosh-cpi-ruby-gem
+          params:
+            tag: version-semver/number
+            tag_prefix: v
+            only_tag: true
         - task: publish
-          file: bosh-src/ci/tasks/publish-gem.yml
+          file: bosh-cpi-ruby-gem/ci/tasks/publish-gem.yml
           params:
             RUBYGEMS_API_KEY: {{rubygems_api_key}}
         - put: version-semver
@@ -39,7 +44,7 @@ jobs:
     public: true
     serial: true
     plan:
-      - get: bosh-src
+      - get: bosh-cpi-ruby-gem
         passed: [unit-tests]
         trigger: false
       - get: version-semver
@@ -50,7 +55,7 @@ jobs:
     public: true
     serial: true
     plan:
-      - get: bosh-src
+      - get: bosh-cpi-ruby-gem
         passed: [unit-tests]
         trigger: false
       - get: version-semver
@@ -58,7 +63,7 @@ jobs:
       - *publish
 
 resources:
-  - name: bosh-src
+  - name: bosh-cpi-ruby-gem
     type: git
     source:
       uri: {{bosh_cpi_url}}

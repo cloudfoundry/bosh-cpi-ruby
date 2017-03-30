@@ -16,7 +16,7 @@ cat << EOF > ~/.gem/credentials
 EOF
 chmod 0600 ~/.gem/credentials
 
-pushd bosh-src
+pushd bosh-cpi-ruby-gem
   git clean -xfd
   echo "${version}" > version
   gem build *.gemspec

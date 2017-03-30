@@ -7,11 +7,11 @@ image_resource:
     repository: bosh/main
 
 inputs:
-  - name: bosh-src
+  - name: bosh-cpi-ruby-gem
   - name: version-semver
 
 run:
-  path: bosh-src/ci/tasks/publish-gem.sh
+  path: bosh-cpi-ruby-gem/ci/tasks/publish-gem.sh
 
 params:
   RUBYGEMS_API_KEY: ""

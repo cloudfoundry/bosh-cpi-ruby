@@ -7,10 +7,10 @@ image_resource:
     repository: bosh/main
 
 inputs:
-  - name: bosh-src
+  - name: bosh-cpi-ruby-gem
 
 run:
-  path: bosh-src/ci/tasks/test-unit.sh
+  path: bosh-cpi-ruby-gem/ci/tasks/test-unit.sh
 
 params:
   RUBY_VERSION: ""

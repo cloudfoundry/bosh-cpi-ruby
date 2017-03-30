@@ -18,7 +18,7 @@ print_git_state() {
 source /etc/profile.d/chruby.sh
 chruby $RUBY_VERSION
 
-pushd bosh-src
+pushd bosh-cpi-ruby-gem
   print_git_state
 
   export PATH=/usr/local/ruby/bin:$PATH
