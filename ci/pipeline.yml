@@ -30,7 +30,8 @@ jobs:
         do:
         - put: bosh-cpi-ruby-gem
           params:
-            tag: version-semver/number
+            repository: bosh-cpi-ruby-gem/
+            tag: version-semver/version
             tag_prefix: v
             only_tag: true
         - task: publish
@@ -66,8 +67,9 @@ resources:
   - name: bosh-cpi-ruby-gem
     type: git
     source:
-      uri: {{bosh_cpi_url}}
+      uri: git@github.com:cloudfoundry/bosh-cpi-ruby.git
       branch: master
+      private_key: {{github_deployment_key__bosh_cpi_ruby}}
 
   - name: version-semver
     type: semver
