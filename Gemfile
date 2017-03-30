@@ -9,6 +9,6 @@ group :development, :test do
   gem 'pry'
 
   gem 'membrane',    '~>1.1.0'
-  gem 'logging',     '~>2.2.0'
+  gem 'logging',     '~>1.8.2'
   gem 'httpclient',  '~>2.8.3'
 end
