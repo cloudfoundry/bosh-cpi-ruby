@@ -18,6 +18,8 @@ describe Bosh::Cpi::RegistryClient do
   end
 
   describe '#update_settings' do
+    let(:header) { { 'Accept' => 'application/json', 'Authorization' => 'Basic dXNlcjpwYXNzd29yZA==', 'Content-Type' => 'application/json'} }
+
     it 'should raise an error when the settings is not a Hash' do
       expect {
         subject.update_settings('id', 'string')

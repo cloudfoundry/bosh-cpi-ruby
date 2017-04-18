@@ -41,8 +41,9 @@ module Bosh::Cpi
 
       payload = JSON.dump(settings)
       url = "#{@endpoint}/instances/#{instance_id}/settings"
+      put_headers = @headers.merge('Content-Type' => 'application/json')
 
-      response = @client.put(url, {:body => payload, :header => @headers})
+      response = @client.put(url, {:body => payload, :header => put_headers})
 
       unless HTTP::Status.successful?(response.status)
         cloud_error("Cannot update settings for '#{instance_id}', got HTTP #{response.status}")
