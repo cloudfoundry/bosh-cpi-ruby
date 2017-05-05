@@ -9,7 +9,6 @@ groups:
 
 jobs:
   - name: unit-tests
-    public: true
     serial: true
     build_logs_to_retain: 250
     plan:
@@ -18,7 +17,6 @@ jobs:
         file: bosh-cpi-ruby-gem/ci/tasks/test-unit.yml
 
   - name: publish-minor
-    public: true
     serial: true
     plan:
       - get: bosh-cpi-ruby-gem
@@ -42,7 +40,6 @@ jobs:
           params: { file: version-semver/number }
 
   - name: publish-major
-    public: true
     serial: true
     plan:
       - get: bosh-cpi-ruby-gem
@@ -53,7 +50,6 @@ jobs:
       - *publish
 
   - name: publish-patch
-    public: true
     serial: true
     plan:
       - get: bosh-cpi-ruby-gem
