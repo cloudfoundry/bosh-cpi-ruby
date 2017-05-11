@@ -28,7 +28,7 @@ describe Bosh::Cpi::Cli do
           formatted_result = "#{Regexp.quote(result.to_s)}"
       end
 
-      /{"result":#{formatted_result},"error":#{error},"log":".*#{log_string}.*"}/
+      /{"result":#{formatted_result},"error":#{error},"log":".*#{log_string}.*"(,"stats":{.+})*}/
     end
 
     describe 'current_vm_id' do
@@ -67,24 +67,35 @@ describe Bosh::Cpi::Cli do
         expect(debug_io.string).to include('Finished current_vm_id')
       end
 
-      it 'logs start time, end time, and duration' do
-        start_time = Time.new(2016,12,12,1,0,0)
-        end_time = Time.new(2016,12,12,1,1,30)
-        allow(Time).to receive(:now).and_return(start_time, end_time)
-
-        expect(cpi).to(receive(:current_vm_id).
-            with(no_args)) { logs_io.write('fake-log') }.
-            and_return('fake-vm-cid')
-
-        subject.run <<-JSON
+      context 'when calculating time' do
+        let(:start_time) { Time.new(2016,12,12,1,0,0) }
+        let(:end_time) { Time.new(2016,12,12,1,1,30) }
+        let(:run_json) do
+          <<-JSON
           {
             "method": "current_vm_id",
             "arguments": [],
             "context" : { "director_uuid" : "abc", "request_id": "123456" }
           }
-        JSON
+          JSON
+        end
 
-        expect(debug_io.string).to match(/90\.\d+ seconds/)
+        before(:each) do
+          allow(Time).to receive(:now).and_return(start_time, end_time)
+          allow(cpi).to receive(:current_vm_id).and_return('fake-vm-cid')
+        end
+
+        it 'logs start time, end time, and duration' do
+          subject.run(run_json)
+
+          expect(debug_io.string).to match(/90\.\d+ seconds/)
+        end
+
+        it 'tracks the execution time' do
+          subject.run(run_json)
+
+          expect(JSON.load(result_io.string)['stats']).to eq({ 'method' => 'current_vm_id', 'time' => { 'start' => '2016-12-12 00:00:00 UTC', 'duration' => 90.0 }})
+        end
       end
     end
 
