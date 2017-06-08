@@ -20,6 +20,7 @@ class Bosh::Cpi::Cli
     snapshot_disk
     delete_snapshot
     get_disks
+    resize_disk
     ping
     calculate_vm_cloud_properties
   ).freeze

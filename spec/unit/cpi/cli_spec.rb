@@ -422,6 +422,23 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    describe 'resize_disk' do
+      it 'takes json and calls specified method on the cpi' do
+        allow(cpi).to(receive(:resize_disk) {logs_io.write('fake-log')}.and_return(nil))
+
+        subject.run <<-JSON
+          {
+            "method": "resize_disk",
+            "arguments": ["fake-disk-cid", 1024],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+
+        expect(cpi).to have_received(:resize_disk).with('fake-disk-cid', 1024)
+        expect(result_io.string).to match(make_result_regexp(nil))
+      end
+    end
+
     describe 'calculate_vm_cloud_properties' do
       it 'takes json and calls specified method on the cpi' do
         expect(cpi).to(receive(:calculate_vm_cloud_properties).

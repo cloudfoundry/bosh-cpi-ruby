@@ -230,6 +230,16 @@ module Bosh
       not_implemented(:get_disks)
     end
 
+    ##
+    # Resizes an existing disk
+    #
+    # @param [String] disk_id disk id
+    # @param [Integer] new_size disk size in MiB
+    # @return [void]
+    def resize_disk(disk_id, new_size)
+      not_implemented(:resize_disk)
+    end
+
     # Specify VM's hardware resources
     # @param [Hash] vm_properties (typically cpu, ram, ephemeral_disk_size)
     # @return [Hash] opaque description of the VM's configuration that
