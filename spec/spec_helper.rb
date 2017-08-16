@@ -1,5 +1,4 @@
 require 'cloud'
-require 'logging'
 require 'bosh/cpi'
 
 # add the spec/support to load path so we can find the dummy provider
@@ -10,7 +9,7 @@ class CloudSpecConfig
 
   def logger
     if @logger.nil?
-      @logger = Logging.logger(STDOUT)
+      @logger = Logger.new(STDOUT)
       @logger.level = :error
     end
     @logger
