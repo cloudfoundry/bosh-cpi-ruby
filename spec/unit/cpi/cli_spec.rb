@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Bosh::Cpi::Cli do
   describe '#run' do
-    subject { described_class.new(lambda { |context| cpi }, logs_io, result_io) }
+    subject { described_class.new(lambda { |context, cpi_api_version| cpi }, logs_io, result_io) }
     let(:cpi) { instance_double('Bosh::Cloud') }
     let(:logs_io) { StringIO.new }
     let(:result_io) { StringIO.new }
@@ -502,6 +502,13 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    context 'when request json includes CPI api_version which is not an integer' do
+      it 'returns invalid_call error' do
+        subject.run('{"method":"info", "arguments": [], "api_version": "1"}')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"CPI api_version requested must be an Integer","ok_to_retry":false},"log":')
+      end
+    end
+
     context 'when request json context does not include director uuid' do
       it 'returns invalid_call error' do
         subject.run('{"method":"create_vm","arguments":[]}')
@@ -628,7 +635,7 @@ describe Bosh::Cpi::Cli do
       it 'it is called with context as argument' do
         obj = double
         expect(obj).to receive(:check_context).with({"director_uuid" => "abc"})
-        cli = described_class.new(lambda { |context|
+        cli = described_class.new(lambda { |context, cpi_api_version|
           obj.check_context(context)
           cpi
         }, logs_io, result_io)
