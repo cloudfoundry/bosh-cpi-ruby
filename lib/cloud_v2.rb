@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012 VMware, Inc.
+# Copyright (c) 2009-2018 VMware, Inc.
 
 module Bosh; module Clouds; end; end
 
@@ -46,16 +46,17 @@ module Bosh
     #  {"name" => "m1.small"}
     #
     # Sample return value:
-    # {
-    #   "vm_cid": "vm-cid-123",
-    #   "networks": {
-    #     ...
+    # [
+    #   "vm-cid-123",
+    #   {
+    #     ...networks...
     #   },
-    #   "disk_hints": {
+    #   {
+    #     ...disk hints...
     #     "system": "/dev/sda",
     #     "ephemeral": "/dev/sdb"
     #   }
-    # }
+    # ]
     #
     # @param [String] agent_id UUID for the agent that will be used later on by the director
     #                 to locate and talk to the agent
@@ -66,7 +67,7 @@ module Bosh
     # @param [String, Array] disk_locality disk id(s) if known of the disk(s) that will be
     #                                    attached to this vm
     # @param [Hash] env environment that will be passed to this vm
-    # @return [Hash] Contains VM ID, list of networks and disk_hints for attached disks
+    # @return [Array] Contains VM ID, object of list of networks and disk_hints for attached disks
     def create_vm(agent_id, stemcell_id, resource_pool, networks, disk_locality, env)
       not_implemented(:create_vm)
     end
@@ -75,7 +76,11 @@ module Bosh
     # @param [String] vm vm id that was once returned by {#create_vm}
     # @param [String] disk disk id that was once returned by {#create_disk}
     # @param [Hash] disk_hints list of attached disks {#create_disk}
-    # @return [Hash] hint for location of attached disk
+    # @return [String] hint for location of attached disk
+    #
+    # Sample return value for attach_disk
+    # "/dev/sdd"
+    #
     def attach_disk(vm_id, disk_id, disk_hints)
       not_implemented(:attach_disk)
     end
@@ -85,6 +90,5 @@ module Bosh
     def not_implemented(method)
       raise Bosh::Clouds::NotImplemented, "'#{method}' is not implemented by #{self.class}"
     end
-
   end
 end
