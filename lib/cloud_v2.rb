@@ -49,10 +49,6 @@ module Bosh
     # [
     #   "vm-cid-123",
     #   {
-    #     ...networks...
-    #   },
-    #   {
-    #     ...disk hints...
     #     "system": "/dev/sda",
     #     "ephemeral": "/dev/sdb"
     #   }
@@ -67,7 +63,7 @@ module Bosh
     # @param [String, Array] disk_locality disk id(s) if known of the disk(s) that will be
     #                                    attached to this vm
     # @param [Hash] env environment that will be passed to this vm
-    # @return [Array] Contains VM ID, object of list of networks and disk_hints for attached disks
+    # @return [Array] Contains VM ID, and disk_hints for attached disks
     def create_vm(agent_id, stemcell_id, resource_pool, networks, disk_locality, env)
       not_implemented(:create_vm)
     end

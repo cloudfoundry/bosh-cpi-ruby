@@ -227,8 +227,27 @@ describe Bosh::Cpi::Cli do
           }
         JSON
 
-        expect(result_io.string).to match(make_result_regexp({"stemcell_formats" => ["format"]}))
+        expect(result_io.string).to match(make_result_regexp({'stemcell_formats' => ['format']}))
       end
+
+      context 'when cpi api_version is specifed' do
+        let(:cpi) { instance_double('Bosh::CloudV2') }
+        it 'should return info with default cpi api_version' do
+          expect(cpi).to(receive(:info) {logs_io.write('fake-log')}.and_return({'stemcell_formats' => ['format'], 'api_version' => '42'}))
+
+          subject.run <<-JSON
+          {
+            "method": "info",
+            "arguments": [],
+            "context" : { "director_uuid" : "abc" },
+            "api_version": 1
+          }
+          JSON
+
+          expect(result_io.string).to match(make_result_regexp({'stemcell_formats' => ['format'], 'api_version' => '42'}))
+        end
+      end
+
     end
 
     describe 'set_vm_metadata' do
