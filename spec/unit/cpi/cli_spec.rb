@@ -517,6 +517,50 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    describe 'create_network' do
+      let(:network_definition) {
+        { 'range' => '192.68.1.1' }
+      }
+      let(:created_network) {
+        [ 'network-cid', {}, {cloud_properties: {}} ]
+      }
+      it 'takes json and calls specified method on the cpi' do
+        expect(cpi).to(receive(:create_network).
+            with(network_definition)).
+            and_return([created_network])
+
+        subject.run <<-JSON
+          {
+            "method": "create_network",
+            "arguments": [ {"range": "192.68.1.1"} ],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+
+        expect(result_io.string).to match('network-cid')
+      end
+    end
+
+    describe 'delete_network' do
+      let(:network_id) { 'network-id' }
+
+      it 'takes json and calls specified method on the cpi' do
+        expect(cpi).to(receive(:delete_network).
+            with('network-id')) { logs_io.write('fake-log') }.
+            and_return(nil)
+
+
+        subject.run <<-JSON
+          {
+            "method": "delete_network",
+            "arguments": [ "network-id" ],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+        expect(result_io.string).to match(make_result_regexp(nil))
+      end
+    end
+
     context 'when request json cannot be parsed' do
       it 'returns invalid_call error' do
         subject.run('invalid-json')

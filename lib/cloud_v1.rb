@@ -240,6 +240,25 @@ module Bosh
       not_implemented(:calculate_vm_cloud_properties)
     end
 
+    ##
+    # Creates a network that will be used to place VMs on.
+    #
+    # @param [Hash] network_definition properties required for creating network.
+    #               may contain range and gateway keys. Has to have cloud_properties - properties required for creating
+    #               this network  specific to a CPI
+    # @return [Hash] network_cid key has unique id of network, cloud_properties are properties required for placing VMs
+    def create_network(network_definition)
+      not_implemented(:create_network)
+    end
+
+    ##
+    # Deletes network by given network_id
+    # @param [String] network_id of network to delete
+    # @return [void]
+    def delete_network(network_id)
+      not_implemented(:delete_network)
+    end
+
     private
 
     def not_implemented(method)

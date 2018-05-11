@@ -23,6 +23,8 @@ class Bosh::Cpi::Cli
     resize_disk
     ping
     calculate_vm_cloud_properties
+    create_network
+    delete_network
   ).freeze
 
   RPC_METHOD_TO_RUBY_METHOD = {
