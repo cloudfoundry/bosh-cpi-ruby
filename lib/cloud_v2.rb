@@ -48,9 +48,22 @@ module Bosh
     # Sample return value:
     # [
     #   "vm-cid-123",
-    #   {
-    #     "system": "/dev/sda",
-    #     "ephemeral": "/dev/sdb"
+    #   { # ... networks ...
+    #     "private": {
+    #       "type": "manual",
+    #       "netmask": "255.255.255.0",
+    #       "gateway": "10.230.13.1",
+    #       "ip": "10.230.13.6",
+    #       "default": [ "dns", "gateway" ],
+    #       "cloud_properties": {
+    #         "net_id": "d29fdb0d-44d8-4e04-818d-5b03888f8eaa"
+    #       }
+    #      },
+    #     "public": {
+    #       "type": "vip",
+    #       "ip": "173.101.112.104",
+    #       "cloud_properties": {}
+    #     }
     #   }
     # ]
     #
