@@ -76,7 +76,7 @@ module Bosh
     # @param [String, Array] disk_locality disk id(s) if known of the disk(s) that will be
     #                                    attached to this vm
     # @param [Hash] env environment that will be passed to this vm
-    # @return [Array] Contains VM ID, and disk_hints for attached disks
+    # @return [Array] [VM_ID, {...networks...}]
     def create_vm(agent_id, stemcell_id, resource_pool, networks, disk_locality, env)
       not_implemented(:create_vm)
     end
@@ -84,13 +84,12 @@ module Bosh
     # Attaches a disk
     # @param [String] vm vm id that was once returned by {#create_vm}
     # @param [String] disk disk id that was once returned by {#create_disk}
-    # @param [Hash] disk_hints list of attached disks {#create_disk}
     # @return [String] hint for location of attached disk
     #
     # Sample return value for attach_disk
     # "/dev/sdd"
     #
-    def attach_disk(vm_id, disk_id, disk_hints)
+    def attach_disk(vm_id, disk_id)
       not_implemented(:attach_disk)
     end
 
