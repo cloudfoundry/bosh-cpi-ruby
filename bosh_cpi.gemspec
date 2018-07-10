@@ -1,8 +1,10 @@
 # coding: utf-8
 
+version = IO.read(File.expand_path('../version', __FILE__))
+
 Gem::Specification.new do |spec|
   spec.name        = 'bosh_cpi'
-  spec.version     = '2.4.2'
+  spec.version     = version
   spec.platform    = Gem::Platform::RUBY
   spec.summary     = 'BOSH CPI'
   spec.description = 'BOSH CPI'

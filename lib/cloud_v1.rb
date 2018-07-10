@@ -21,10 +21,11 @@ module Bosh
     ## Information about cpi
     #
     # Sample info response:
-    #  {"stemcell_formats" =>
-    #    ["aws-raw", "aws-light"]
+    #  {
+    #   "stemcell_formats" => ["aws-raw", "aws-light"],
+    #   "api_version" => <highest supported version>,
     #  }
-    #  @return [Hash] information about cpi, currently stemcell formats, which are supported
+    #  @return [Hash] information about cpi, currently supported stemcell formats; CPI api_version this cpi supports
     def info
       not_implemented(:info)
     end

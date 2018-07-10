@@ -84,7 +84,7 @@ module Bosh
     # Attaches a disk
     # @param [String] vm vm id that was once returned by {#create_vm}
     # @param [String] disk disk id that was once returned by {#create_disk}
-    # @return [String] hint for location of attached disk
+    # @return [Object] hint for location of attached disk - varies by IaaS
     #
     # Sample return value for attach_disk
     # "/dev/sdd"
