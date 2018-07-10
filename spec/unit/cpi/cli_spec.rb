@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Bosh::Cpi::Cli do
   describe '#run' do
-    subject { described_class.new(lambda { |context| cpi }, logs_io, result_io) }
+    subject { described_class.new(lambda { |context, cpi_api_version| cpi }, logs_io, result_io) }
     let(:cpi) { instance_double('Bosh::Cloud') }
     let(:logs_io) { StringIO.new }
     let(:result_io) { StringIO.new }
@@ -157,6 +157,38 @@ describe Bosh::Cpi::Cli do
 
         expect(result_io.string).to match(make_result_regexp('fake-vm-cid'))
       end
+      context 'when cpi_version >=2' do
+        let(:cpi) { instance_double('Bosh::CloudV2') }
+        it 'return additional network based on cpi_version' do
+          expect(cpi).to receive(:create_vm).
+            with(
+              'fake-agent-id',
+              'fake-stemcell-cid',
+              {'cloud' => 'props'},
+              {'net' => 'props'},
+              ['fake-disk-cid'],
+              {'env' => 'props'},
+              ) { logs_io.write('fake-log') }.
+            and_return(['fake-vm-cid', {'public': 'network', 'private': 'network'}])
+
+          subject.run <<-JSON
+          {
+            "method": "create_vm",
+            "arguments": [
+              "fake-agent-id",
+              "fake-stemcell-cid",
+              {"cloud": "props"},
+              {"net": "props"},
+              ["fake-disk-cid"],
+              {"env": "props"}
+            ],
+            "context" : { "director_uuid" : "abc" }
+          }
+          JSON
+
+          expect(result_io.string).to include('"fake-vm-cid",{"public":"network","private":"network"}')
+        end
+      end
     end
 
     describe 'delete_vm' do
@@ -227,8 +259,27 @@ describe Bosh::Cpi::Cli do
           }
         JSON
 
-        expect(result_io.string).to match(make_result_regexp({"stemcell_formats" => ["format"]}))
+        expect(result_io.string).to match(make_result_regexp({'stemcell_formats' => ['format']}))
       end
+
+      context 'when cpi api_version is specifed' do
+        let(:cpi) { instance_double('Bosh::CloudV2') }
+        it 'should return info with default cpi api_version' do
+          expect(cpi).to(receive(:info) {logs_io.write('fake-log')}.and_return({'stemcell_formats' => ['format'], 'api_version' => '42'}))
+
+          subject.run <<-JSON
+          {
+            "method": "info",
+            "arguments": [],
+            "context" : { "director_uuid" : "abc" },
+            "api_version": 1
+          }
+          JSON
+
+          expect(result_io.string).to match(make_result_regexp({'stemcell_formats' => ['format'], 'api_version' => '42'}))
+        end
+      end
+
     end
 
     describe 'set_vm_metadata' do
@@ -502,6 +553,13 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    context 'when request json includes CPI api_version which is not an integer' do
+      it 'returns invalid_call error' do
+        subject.run('{"method":"info", "arguments": [], "api_version": "1"}')
+        expect(result_io.string).to include('{"result":null,"error":{"type":"InvalidCall","message":"CPI api_version requested must be an Integer","ok_to_retry":false},"log":')
+      end
+    end
+
     context 'when request json context does not include director uuid' do
       it 'returns invalid_call error' do
         subject.run('{"method":"create_vm","arguments":[]}')
@@ -628,7 +686,7 @@ describe Bosh::Cpi::Cli do
       it 'it is called with context as argument' do
         obj = double
         expect(obj).to receive(:check_context).with({"director_uuid" => "abc"})
-        cli = described_class.new(lambda { |context|
+        cli = described_class.new(lambda { |context, cpi_api_version|
           obj.check_context(context)
           cpi
         }, logs_io, result_io)

@@ -1,4 +1,5 @@
 # coding: utf-8
+
 version = IO.read(File.expand_path('../version', __FILE__))
 
 Gem::Specification.new do |spec|

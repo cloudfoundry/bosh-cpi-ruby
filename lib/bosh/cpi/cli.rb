@@ -61,6 +61,11 @@ class Bosh::Cpi::Cli
       return error_response(INVALID_CALL_ERROR_TYPE, "Arguments must be an Array", false)
     end
 
+    cpi_api_version = request['api_version']
+    if request.has_key?('api_version') && !cpi_api_version.is_a?(Integer)
+      return error_response(INVALID_CALL_ERROR_TYPE, "CPI api_version requested must be an Integer", false)
+    end
+
     context = request['context']
     unless context.is_a?(Hash) && context['director_uuid'].is_a?(String)
       return error_response(INVALID_CALL_ERROR_TYPE, "Request should include context with director uuid", false)
@@ -77,7 +82,7 @@ class Bosh::Cpi::Cli
       start_time = Time.now.utc
       @logger.info("Starting #{method}...")
 
-      cpi = @cpi.call(context)
+      cpi = @cpi.call(context, cpi_api_version)
 
       result = cpi.public_send(ruby_method, *arguments)
     rescue Bosh::Clouds::RetriableCloudError => e
