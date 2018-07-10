@@ -22,6 +22,6 @@ pushd bosh-cpi-ruby-gem
   print_git_state
 
   export PATH=/usr/local/ruby/bin:$PATH
-  bundle install --local
+  bundle install
   bundle exec rspec spec
 popd

@@ -14,6 +14,8 @@ jobs:
     plan:
       - { get: bosh-cpi-ruby-gem, trigger: true }
       - task: test
+        params:
+          RUBY_VERSION: 2.4.4
         file: bosh-cpi-ruby-gem/ci/tasks/test-unit.yml
 
   - name: publish-minor
@@ -36,6 +38,7 @@ jobs:
           file: bosh-cpi-ruby-gem/ci/tasks/publish-gem.yml
           params:
             RUBYGEMS_API_KEY: {{rubygems_api_key}}
+            RUBY_VERSION: 2.4.4
         - put: version-semver
           params: { file: version-semver/number }
       - &tracker-publish
