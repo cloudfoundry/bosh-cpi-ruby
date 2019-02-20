@@ -252,6 +252,14 @@ module Bosh
     end
 
     ##
+    # Creates a external ip
+    #
+    # @return [Hash]: contains 'public_ip', some other attribute which we dont need right now.
+    def create_external_ip()
+      not_implemented(:create_external_ip)
+    end
+
+    ##
     # Deletes network by given network_id
     # @param [String] network_id of network to delete
     # @return [void]
