@@ -1,12 +1,4 @@
 ---
-groups:
-  - name: cpi-ruby
-    jobs:
-      - unit-tests
-      - publish-major
-      - publish-minor
-      - publish-patch
-
 jobs:
   - name: unit-tests
     serial: true
