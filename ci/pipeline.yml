@@ -29,15 +29,10 @@ jobs:
         - task: publish
           file: bosh-cpi-ruby-gem/ci/tasks/publish-gem.yml
           params:
-            RUBYGEMS_API_KEY: {{rubygems_api_key}}
+            RUBYGEMS_API_KEY: ((rubygems_api_key))
             RUBY_VERSION: 2.4.4
         - put: version-semver
           params: { file: version-semver/number }
-      - &tracker-publish
-        put: tracker-output
-        params:
-          repos:
-          - bosh-cpi-ruby-gem
 
   - name: publish-major
     serial: true
@@ -48,7 +43,6 @@ jobs:
       - get: version-semver
         params: { bump: major }
       - *publish
-      - *tracker-publish
 
   - name: publish-patch
     serial: true
@@ -59,7 +53,6 @@ jobs:
       - get: version-semver
         params: { bump: patch }
       - *publish
-      - *tracker-publish
 
 resources:
   - name: bosh-cpi-ruby-gem
@@ -67,19 +60,12 @@ resources:
     source:
       uri: git@github.com:cloudfoundry/bosh-cpi-ruby.git
       branch: master
-      private_key: {{github_deployment_key__bosh_cpi_ruby}}
+      private_key: ((github_deploy_key_bosh-cpi-ruby.private_key))
 
   - name: version-semver
     type: semver
     source:
       key: current-version
-      access_key_id: {{bosh_cpi_ruby__access_key}}
-      secret_access_key: {{bosh_cpi_ruby__secret_key}}
-      bucket: {{bosh_cpi_ruby__bucket}}
-
-  - name: tracker-output
-    type: tracker
-    source:
-      token: {{tracker_api_token}}
-      project_id: {{tracker_project_id}}
-      tracker_url: https://www.pivotaltracker.com
+      access_key_id: ((bosh-cpi-ruby_aws_access_key.username))
+      secret_access_key: ((bosh-cpi-ruby_aws_access_key.password))
+      bucket: bosh-cpi-ruby
