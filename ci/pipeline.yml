@@ -66,6 +66,14 @@ resources:
     type: semver
     source:
       key: current-version
-      access_key_id: ((bosh-cpi-ruby_aws_access_key.username))
-      secret_access_key: ((bosh-cpi-ruby_aws_access_key.password))
+      access_key_id: ((bosh-cpi-ruby_assume_aws_access_key.username))
+      secret_access_key: ((bosh-cpi-ruby_assume_aws_access_key.password))
+      assume_role_arn: ((bosh-cpi-ruby_assume_aws_access_key.role_arn))
       bucket: bosh-cpi-ruby
+
+resource_types:
+- name: semver
+  type: docker-image
+  source:
+    repository: concourse/semver-resource
+    tag: 1.6
