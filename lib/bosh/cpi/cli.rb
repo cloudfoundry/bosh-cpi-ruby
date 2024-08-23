@@ -13,6 +13,7 @@ class Bosh::Cpi::Cli
     set_vm_metadata
     set_disk_metadata
     create_disk
+    update_disk
     has_disk
     delete_disk
     attach_disk

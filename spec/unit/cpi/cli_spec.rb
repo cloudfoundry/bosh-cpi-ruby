@@ -345,6 +345,34 @@ describe Bosh::Cpi::Cli do
       end
     end
 
+    describe 'update_disk' do
+      it 'takes json and calls specified method on the cpi' do
+        expect(cpi).to(receive(:update_disk).
+          with('fake-disk-cid', 10240, {
+            'key-int' => 1,
+            'key-str' => 'fake'
+          })) { logs_io.write('fake-log') }.
+          and_return(nil)
+
+        subject.run <<-JSON
+          {
+            "method": "update_disk",
+            "arguments": [
+              "fake-disk-cid",
+              10240,
+              {
+                "key-int": 1,
+                "key-str": "fake"
+              }
+            ],
+            "context" : { "director_uuid" : "abc" }
+          }
+        JSON
+
+        expect(result_io.string).to match(make_result_regexp(nil))
+      end
+    end
+
     describe 'has_disk' do
       [true, false].each do |result|
         it 'takes json and calls specified method on the cpi' do
