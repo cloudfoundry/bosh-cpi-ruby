@@ -2,13 +2,13 @@
 jobs:
   - name: unit-tests
     serial: true
-    build_logs_to_retain: 250
     plan:
-      - { get: bosh-cpi-ruby-gem, trigger: true }
+      - get: bosh-cpi-ruby-gem
+        trigger: true
+      - get: bosh-integration-registry-image
       - task: test
-        params:
-          RUBY_VERSION: 2.4.4
         file: bosh-cpi-ruby-gem/ci/tasks/test-unit.yml
+        image: bosh-integration-registry-image
 
   - name: publish-minor
     serial: true
@@ -70,6 +70,13 @@ resources:
       secret_access_key: ((bosh-cpi-ruby_assume_aws_access_key.password))
       assume_role_arn: ((bosh-cpi-ruby_assume_aws_access_key.role_arn))
       bucket: bosh-cpi-ruby
+
+  - name: bosh-integration-registry-image
+    type: registry-image
+    source:
+      repository: bosh/integration
+      username: ((docker.username))
+      password: ((docker.password))
 
 resource_types:
 - name: semver

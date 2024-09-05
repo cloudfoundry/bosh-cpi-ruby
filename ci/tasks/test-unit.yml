@@ -2,15 +2,12 @@
 platform: linux
 
 image_resource:
-  type: docker-image
+  type: registry-image
   source:
-    repository: bosh/main
+    repository: bosh/integration
 
 inputs:
   - name: bosh-cpi-ruby-gem
 
 run:
   path: bosh-cpi-ruby-gem/ci/tasks/test-unit.sh
-
-params:
-  RUBY_VERSION: ""
