@@ -232,6 +232,18 @@ module Bosh
       not_implemented(:resize_disk)
     end
 
+    ##
+    # Updates an existing disk via the IaaS API
+    #
+    # @param [String] disk_id disk id
+    # @param [Integer] new_size disk size in MiB
+    # @param [Hash] cloud_properties properties required for updating this disk
+    #               specific to a CPI
+    # @return [void]
+    def update_disk(disk_id, new_size, cloud_properties)
+      not_implemented(:update_disk)
+    end
+
     # Specify VM's hardware resources
     # @param [Hash] vm_properties (typically cpu, ram, ephemeral_disk_size)
     # @return [Hash] opaque description of the VM's configuration that
@@ -267,4 +279,3 @@ module Bosh
     end
   end
 end
-
