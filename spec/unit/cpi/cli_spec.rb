@@ -592,7 +592,7 @@ describe Bosh::Cpi::Cli do
     context 'when request json cannot be parsed' do
       it 'returns invalid_call error' do
         subject.run('invalid-json')
-        expect(result_io.string).to match(/{"result":null,"error":{"type":"InvalidCall","message":"Request cannot be deserialized, details: \d+: unexpected token at 'invalid-json'","ok_to_retry":false},"log":/)
+        expect(result_io.string).to match(/{"result":null,"error":{"type":"InvalidCall","message":"Request cannot be deserialized, details: unexpected token at 'invalid-json'","ok_to_retry":false},"log":/)
         expect(result_io.string).to include_the_backtrace
       end
     end
