@@ -20,6 +20,7 @@ jobs:
         params: { bump: minor }
       - &publish
         do:
+        - get: bosh-integration-registry-image
         - put: bosh-cpi-ruby-gem
           params:
             repository: bosh-cpi-ruby-gem/
@@ -28,9 +29,9 @@ jobs:
             only_tag: true
         - task: publish
           file: bosh-cpi-ruby-gem/ci/tasks/publish-gem.yml
+          image: bosh-integration-registry-image
           params:
             RUBYGEMS_API_KEY: ((rubygems_api_key))
-            RUBY_VERSION: 2.4.4
         - put: version-semver
           params: { file: version-semver/number }
 

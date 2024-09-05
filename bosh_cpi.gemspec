@@ -1,6 +1,7 @@
 # coding: utf-8
 
-version = IO.read(File.expand_path('../version', __FILE__))
+version_file = File.expand_path('../version', __FILE__)
+version = File.exist?(version_file) ? IO.read(version_file) : '0.0.0.dev'
 
 Gem::Specification.new do |spec|
   spec.name        = 'bosh_cpi'
@@ -19,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'membrane',    '~>1.1.0'
   spec.add_dependency 'httpclient',  '~>2.8.3'
+  spec.add_dependency 'rspec'
 end

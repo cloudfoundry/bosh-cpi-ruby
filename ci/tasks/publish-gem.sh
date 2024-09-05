@@ -3,12 +3,8 @@
 set -e
 
 : ${RUBYGEMS_API_KEY:?}
-: ${RUBY_VERSION:="2.3.1"}
 
 version="$( cat version-semver/version )"
-
-source /etc/profile.d/chruby.sh
-chruby $RUBY_VERSION
 
 cat << EOF > ~/.gem/credentials
 ---
