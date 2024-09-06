@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'BOSH CPI'
   spec.description = 'BOSH CPI'
   spec.author      = 'VMware'
-  spec.homepage    = 'https://github.com/cloudfoundry/bosh'
+  spec.homepage    = 'https://github.com/cloudfoundry/bosh-cpi-ruby/'
   spec.license     = 'Apache 2.0'
   spec.email       = 'support@cloudfoundry.com'
   spec.required_ruby_version = Gem::Requirement.new('>= 1.9.3')
