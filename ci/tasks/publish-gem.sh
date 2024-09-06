@@ -6,6 +6,7 @@ set -e
 
 version="$( cat version-semver/version )"
 
+mkdir ~/.gem
 cat << EOF > ~/.gem/credentials
 ---
 :rubygems_api_key: ${RUBYGEMS_API_KEY}

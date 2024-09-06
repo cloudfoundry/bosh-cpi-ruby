@@ -15,4 +15,3 @@ run:
 
 params:
   RUBYGEMS_API_KEY: ""
-  RUBY_VERSION:     ""
