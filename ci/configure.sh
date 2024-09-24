@@ -2,5 +2,5 @@
 
 set -eu
 
-fly -t bosh-ecosystem sp -p bosh-cpi-ruby \
+fly -t "${CONCOURSE_TARGET:-bosh}" set-pipeline -p bosh-cpi-ruby \
   -c ci/pipeline.yml

@@ -66,18 +66,18 @@ resources:
   - name: version-semver
     type: semver
     source:
-      key: current-version
-      access_key_id: ((bosh-cpi-ruby_assume_aws_access_key.username))
-      secret_access_key: ((bosh-cpi-ruby_assume_aws_access_key.password))
-      assume_role_arn: ((bosh-cpi-ruby_assume_aws_access_key.role_arn))
-      bucket: bosh-cpi-ruby
+      driver: git
+      uri: git@github.com:cloudfoundry/bosh-cpi-ruby.git
+      branch: semver
+      file: version
+      private_key: ((github_deploy_key_bosh-cpi-ruby.private_key))
 
   - name: bosh-integration-registry-image
     type: registry-image
     source:
       repository: bosh/integration
-      username: ((docker.username))
-      password: ((docker.password))
+      username: ((dockerhub_username))
+      password: ((dockerhub_password))
 
 resource_types:
 - name: semver
