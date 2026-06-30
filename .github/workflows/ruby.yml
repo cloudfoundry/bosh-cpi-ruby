@@ -1,0 +1,18 @@
+name: Run Specs
+on: [ push, pull_request ]
+
+jobs:
+  unit_specs:
+    strategy:
+      matrix:
+        ruby: ['3.3', '3.4', '4.0', head]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: run-specs
+      run: |
+        bundle install
+        bundle exec rspec
