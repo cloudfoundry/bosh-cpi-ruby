@@ -18,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.files        = Dir['lib/**/*'].select{ |f| File.file? f }
   spec.require_path = 'lib'
 
-  spec.add_dependency 'membrane',    '~>1.1.0'
-  spec.add_dependency 'httpclient',  '~>2.8.3'
+  spec.add_dependency 'membrane'
+  spec.add_dependency 'httpclient'
 
   spec.add_development_dependency 'rspec'
 end
