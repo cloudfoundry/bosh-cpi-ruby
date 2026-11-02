@@ -60,7 +60,7 @@ resources:
     type: git
     source:
       uri: git@github.com:cloudfoundry/bosh-cpi-ruby.git
-      branch: master
+      branch: main
       private_key: ((github_deploy_key_bosh-cpi-ruby.private_key))
 
   - name: version-semver
